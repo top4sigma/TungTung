@@ -1,28 +1,55 @@
 import java.io.*;
 
 public class DialogueSystem {
+
     public static void main(String[] args) throws Exception {
         String path = "./dump.txt";
 
         BufferedReader bfro = new BufferedReader(
                 new FileReader(path));
+
         String character = null;
         String st;
 
         StringBuilder dialogue = new StringBuilder();
 
         while ((st = bfro.readLine()) != null) {
+
+            // Blank line = completely new character/dialogue block
             if (st.trim().isEmpty()) {
 
                 if (character != null && dialogue.length() > 0) {
                     outputText(dialogue.toString(), character);
                 }
+
                 character = null;
                 dialogue.setLength(0);
 
-            } else if (character == null) {
+            }
+
+            // * at the beginning of a line = new textbox
+            else if (st.startsWith("*")) {
+
+                // Print the textbox we've been building
+                if (character != null && dialogue.length() > 0) {
+                    outputText(dialogue.toString(), character);
+                }
+
+                // Start a new textbox
+                dialogue.setLength(0);
+
+                // Keep the * in the dialogue
+                dialogue.append(st);
+            }
+
+            // First non-empty line = character name
+            else if (character == null) {
                 character = st;
-            } else {
+            }
+
+            // Normal dialogue line
+            else {
+
                 if (dialogue.length() > 0) {
                     dialogue.append("\n");
                 }
@@ -31,6 +58,7 @@ public class DialogueSystem {
             }
         }
 
+        // Print the final textbox
         if (character != null && dialogue.length() > 0) {
             outputText(dialogue.toString(), character);
         }
@@ -38,15 +66,21 @@ public class DialogueSystem {
         bfro.close();
     }
 
+
     public static void outputText(String input, String character) {
 
         System.out.print("╔════ ");
         System.out.print(character);
-        for(int a = 0; a < 58 - (4 + character.length()); a++)
-          System.out.print("═");
+
+        for (int a = 0; a < 58 - (4 + character.length()); a++) {
+            System.out.print("═");
+        }
+
         System.out.println("╗");
 
         String[] lines = input.split("\n");
+
+        int lineCount = 0;
 
         for (String line : lines) {
 
@@ -69,7 +103,23 @@ public class DialogueSystem {
                 }
 
                 System.out.println("║");
+
+                lineCount++;
             }
+        }
+
+        // Make every textbox at least 2 lines tall
+        while (lineCount < 2) {
+
+            System.out.print("║");
+
+            for (int j = 0; j < 59; j++) {
+                System.out.print(" ");
+            }
+
+            System.out.println("║");
+
+            lineCount++;
         }
 
         System.out.println(
