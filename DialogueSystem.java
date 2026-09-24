@@ -1,6 +1,6 @@
 public class DialogueSystem{
   public static void main(String[] args){
-    outputText("* Those who know. I am tung tung tung, I am the sigma of all the ligmas. Those who know about mango mustard.", "Triple T chan");
+    outputText("* yo what is up あなたは太っています hows it hanging in the crib", "Triple T chan");
   }
 
   public static void outputText(String input, String character){
