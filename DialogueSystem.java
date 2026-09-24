@@ -6,7 +6,7 @@ public class DialogueSystem{
   public static void outputText(String input){
     System.out.println("|---- Triple T chan ---------------------------------------|");
     int length = input.length();
-    int repeats = Math.floor(input / 59);
+    int repeats = (int)Math.floor(length / 59);
     for(int i = 0; i < repeats; i++){
       System.out.print("|");
       System.out.print(input.substring(i  * 59, (i  * 59) + 59));
