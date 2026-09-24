@@ -9,7 +9,9 @@ public class DialogueSystem{
     int repeats = Math.floor(input / 59);
     for(int i = 0; i < repeats; i++){
       System.out.print("|");
-      System.out.print(input.substring)
+      System.out.print(input.substring(i  * 59, (i  * 59) + 59));
+      System.out.print("|");
     }
+    System.out.println("|----------------------------------------------------------|");
   }
 }
