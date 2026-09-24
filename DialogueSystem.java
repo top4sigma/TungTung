@@ -1,29 +1,79 @@
-public class DialogueSystem{
-  public static void main(String[] args){
-    outputText("* yo what is up あなたは太っています hows it hanging in the crib", "Triple T chan");
-  }
+import java.io.*;
 
-  public static void outputText(String input, String character){
-    System.out.print("╔════ ");
-    System.out.print(character);
-    System.out.println(" ════════════════════════════════════════╗");
-    int length = input.length();
-    int repeats = (int)Math.ceil(length / 59.0);
-    for(int i = 0; i < repeats; i++){
-      System.out.print("║");
-      if((length - i * 59) >= 59)
-      {
-        System.out.print(input.substring(i  * 59, (i  * 59) + 59));
-      }
-      else{
-        System.out.print(input.substring(i  * 59, (i  * 59) + (length - i * 59)));
-        for(int j = 0; j < 59- (length - i * 59); j++)
-        {
-          System.out.print(" ");
+public class DialogueSystem {
+    public static void main(String[] args) throws Exception {
+        String path = "./dump.txt";
+
+        BufferedReader bfro = new BufferedReader(
+                new FileReader(path));
+        String character = null;
+        String st;
+
+        StringBuilder dialogue = new StringBuilder();
+
+        while ((st = bfro.readLine()) != null) {
+            if (st.trim().isEmpty()) {
+
+                if (character != null && dialogue.length() > 0) {
+                    outputText(dialogue.toString(), character);
+                }
+                character = null;
+                dialogue.setLength(0);
+
+            } else if (character == null) {
+                character = st;
+            } else {
+                if (dialogue.length() > 0) {
+                    dialogue.append("\n");
+                }
+
+                dialogue.append(st);
+            }
         }
-      }  
-      System.out.println("║");
+
+        if (character != null && dialogue.length() > 0) {
+            outputText(dialogue.toString(), character);
+        }
+
+        bfro.close();
     }
-    System.out.println("╚═══════════════════════════════════════════════════════════╝");
-  }
+
+    public static void outputText(String input, String character) {
+
+        System.out.print("╔════ ");
+        System.out.print(character);
+        for(int a = 0; a < 58 - (4 + character.length()); a++)
+          System.out.print("═");
+        System.out.println("╗");
+
+        String[] lines = input.split("\n");
+
+        for (String line : lines) {
+
+            int length = line.length();
+            int repeats = Math.max(1, (int) Math.ceil(length / 59.0));
+
+            for (int i = 0; i < repeats; i++) {
+
+                System.out.print("║");
+
+                int start = i * 59;
+                int end = Math.min(start + 59, length);
+
+                String part = line.substring(start, end);
+
+                System.out.print(part);
+
+                for (int j = part.length(); j < 59; j++) {
+                    System.out.print(" ");
+                }
+
+                System.out.println("║");
+            }
+        }
+
+        System.out.println(
+                "╚═══════════════════════════════════════════════════════════╝"
+        );
+    }
 }
