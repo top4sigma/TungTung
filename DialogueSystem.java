@@ -4,11 +4,11 @@ public class DialogueSystem{
   }
 
   public static void outputText(String input){
-    System.out.println("|---- Triple T chan ---------------------------------------|");
+    System.out.println("╔════ Triple T chan ══════════════════════════════════════╗");
     int length = input.length();
     int repeats = (int)Math.ceil(length / 59.0);
     for(int i = 0; i < repeats; i++){
-      System.out.print("|");
+      System.out.print("║");
       if((length - i * 59) >= 59)
       {
         System.out.print(input.substring(i  * 59, (i  * 59) + 59));
@@ -20,8 +20,8 @@ public class DialogueSystem{
           System.out.print(" ");
         }
       }  
-      System.out.println("|");
+      System.out.println("║");
     }
-    System.out.println("|----------------------------------------------------------|");
+    System.out.println("╚══════════════════════════════════════════════════════════╝");
   }
 }
