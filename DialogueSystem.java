@@ -10,13 +10,22 @@ public class DialogueSystem {
 
         Inputs.open();
 
+        String character = null;
         String st;
 
         while ((st = bfro.readLine()) != null) {
 
-            if (st.trim().isEmpty()) continue;
+            if (st.trim().isEmpty()) {
+                character = null;
+                continue;
+            }
 
-            outputText(st, "");
+            if (character == null) {
+                character = st;
+                continue;
+            }
+
+            outputText(st, character);
             waitForEnter();
         }
 
