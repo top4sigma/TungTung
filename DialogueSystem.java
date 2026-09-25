@@ -8,62 +8,20 @@ public class DialogueSystem {
         BufferedReader bfro = new BufferedReader(
                 new FileReader(path));
 
-        String character = null;
-        String st;
+        Inputs.open();
 
-        StringBuilder dialogue = new StringBuilder();
+        String st;
 
         while ((st = bfro.readLine()) != null) {
 
-            // Blank line = completely new character/dialogue block
-            if (st.trim().isEmpty()) {
+            if (st.trim().isEmpty()) continue;
 
-                if (character != null && dialogue.length() > 0) {
-                    outputText(dialogue.toString(), character);
-                }
-
-                character = null;
-                dialogue.setLength(0);
-
-            }
-
-            // * at the beginning of a line = new textbox
-            else if (st.startsWith("*")) {
-
-                // Print the textbox we've been building
-                if (character != null && dialogue.length() > 0) {
-                    outputText(dialogue.toString(), character);
-                }
-
-                // Start a new textbox
-                dialogue.setLength(0);
-
-                // Keep the * in the dialogue
-                dialogue.append(st);
-            }
-
-            // First non-empty line = character name
-            else if (character == null) {
-                character = st;
-            }
-
-            // Normal dialogue line
-            else {
-
-                if (dialogue.length() > 0) {
-                    dialogue.append("\n");
-                }
-
-                dialogue.append(st);
-            }
-        }
-
-        // Print the final textbox
-        if (character != null && dialogue.length() > 0) {
-            outputText(dialogue.toString(), character);
+            outputText(st, "");
+            waitForEnter();
         }
 
         bfro.close();
+        Inputs.close();
     }
 
 
@@ -125,5 +83,13 @@ public class DialogueSystem {
         System.out.println(
                 "╚═══════════════════════════════════════════════════════════╝"
         );
+    }
+
+
+    public static void waitForEnter() throws Exception {
+        while (true) {
+            int key = Inputs.readKey();
+            if (key == 13) break;
+        }
     }
 }
