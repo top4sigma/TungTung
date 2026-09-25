@@ -39,6 +39,11 @@ public class ttlc {
                 // Print options
                 for (int i = 0; i < options.length; i++) {
 
+                    // Selection highlight (reverse video)
+                    if (i == selected) {
+                        terminal.writer().print("\033[7m");
+                    }
+
                     terminal.writer().print(options[i]);
 
                     // Space so every option gets the same width
@@ -49,6 +54,7 @@ public class ttlc {
                     // Selection marker
                     if (i == selected) {
                         terminal.writer().print("<");
+                        terminal.writer().print("\033[27m");
                     } else {
                         terminal.writer().print(" ");
                     }
@@ -67,20 +73,18 @@ public class ttlc {
                     int second = terminal.reader().read();
                     int third = terminal.reader().read();
 
-                    // LEFT: ESC O D
+                    // LEFT: ESC O D (SS3) or ESC [ D (CSI)
                     if (second == 'O' && third == 'D') {
-
-                        if (selected > 0) {
-                            selected--;
-                        }
+                        if (selected > 0) selected--;
+                    } else if (second == '[' && third == 'D') {
+                        if (selected > 0) selected--;
                     }
 
-                    // RIGHT: ESC O C
+                    // RIGHT: ESC O C (SS3) or ESC [ C (CSI)
                     else if (second == 'O' && third == 'C') {
-
-                        if (selected < options.length - 1) {
-                            selected++;
-                        }
+                        if (selected < options.length - 1) selected++;
+                    } else if (second == '[' && third == 'C') {
+                        if (selected < options.length - 1) selected++;
                     }
                 }
 
