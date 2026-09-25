@@ -15,35 +15,33 @@ public class DialogueSystem {
 
         while ((st = bfro.readLine()) != null) {
 
-            // Blank line = completely new character/dialogue block
+            // Blank line = completely new character
             if (st.trim().isEmpty()) {
 
                 if (character != null && dialogue.length() > 0) {
                     outputText(dialogue.toString(), character);
-                    waitForEnter();
+                    // waitForEnter();
                 }
 
                 character = null;
                 dialogue.setLength(0);
             }
 
-            // * at the beginning = new textbox
+            // * = new textbox
             else if (st.startsWith("*")) {
 
-                // Print the textbox we've been building
+                // Print previous textbox
                 if (character != null && dialogue.length() > 0) {
                     outputText(dialogue.toString(), character);
-                    waitForEnter();
+                    // waitForEnter();
                 }
 
-                // Start a new textbox
+                // Start the new textbox
                 dialogue.setLength(0);
-
-                // Keep the *
                 dialogue.append(st);
             }
 
-            // First non-empty line = character name
+            // First line = character name
             else if (character == null) {
                 character = st;
             }
@@ -59,10 +57,10 @@ public class DialogueSystem {
             }
         }
 
-        // Print the final textbox
+        // Print final textbox
         if (character != null && dialogue.length() > 0) {
             outputText(dialogue.toString(), character);
-            waitForEnter();
+            // waitForEnter();
         }
 
         bfro.close();
@@ -75,7 +73,7 @@ public class DialogueSystem {
         System.out.print(character);
         System.out.print(" ");
 
-        // Account for the extra space after the name
+        // Extra space after character name
         for (int a = 0; a < 58 - (5 + character.length()); a++) {
             System.out.print("═");
         }
@@ -112,7 +110,7 @@ public class DialogueSystem {
             }
         }
 
-        // Make every textbox at least 2 lines tall
+        // Every textbox must be at least 2 lines tall
         while (lineCount < 2) {
 
             System.out.print("║");
@@ -132,11 +130,9 @@ public class DialogueSystem {
     }
 
 
-    public static void waitForEnter() throws Exception {
-        while (true) {
-            // int key = Inputs.readKey();
-            // if (key == 13) break;
-            System.in.read();
-        }
-    }
+    // public static void waitForEnter() throws Exception {
+
+        // Temporary version:
+        //System.in.read();
+    // }
 }
