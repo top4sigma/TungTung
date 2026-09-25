@@ -8,29 +8,64 @@ public class DialogueSystem {
         BufferedReader bfro = new BufferedReader(
                 new FileReader(path));
 
-        Inputs.open();
-
         String character = null;
         String st;
 
+        StringBuilder dialogue = new StringBuilder();
+
         while ((st = bfro.readLine()) != null) {
 
+            // Blank line = completely new character/dialogue block
             if (st.trim().isEmpty()) {
+
+                if (character != null && dialogue.length() > 0) {
+                    outputText(dialogue.toString(), character);
+                    waitForEnter();
+                }
+
                 character = null;
-                continue;
+                dialogue.setLength(0);
             }
 
-            if (character == null) {
+            // * at the beginning = new textbox
+            else if (st.startsWith("*")) {
+
+                // Print the textbox we've been building
+                if (character != null && dialogue.length() > 0) {
+                    outputText(dialogue.toString(), character);
+                    waitForEnter();
+                }
+
+                // Start a new textbox
+                dialogue.setLength(0);
+
+                // Keep the *
+                dialogue.append(st);
+            }
+
+            // First non-empty line = character name
+            else if (character == null) {
                 character = st;
-                continue;
             }
 
-            outputText(st, character);
+            // Normal dialogue line
+            else {
+
+                if (dialogue.length() > 0) {
+                    dialogue.append("\n");
+                }
+
+                dialogue.append(st);
+            }
+        }
+
+        // Print the final textbox
+        if (character != null && dialogue.length() > 0) {
+            outputText(dialogue.toString(), character);
             waitForEnter();
         }
 
         bfro.close();
-        Inputs.close();
     }
 
 
@@ -38,8 +73,10 @@ public class DialogueSystem {
 
         System.out.print("╔════ ");
         System.out.print(character);
+        System.out.print(" ");
 
-        for (int a = 0; a < 58 - (4 + character.length()); a++) {
+        // Account for the extra space after the name
+        for (int a = 0; a < 58 - (5 + character.length()); a++) {
             System.out.print("═");
         }
 
@@ -97,8 +134,9 @@ public class DialogueSystem {
 
     public static void waitForEnter() throws Exception {
         while (true) {
-            int key = Inputs.readKey();
-            if (key == 13) break;
+            // int key = Inputs.readKey();
+            // if (key == 13) break;
+            System.in.read();
         }
     }
 }
